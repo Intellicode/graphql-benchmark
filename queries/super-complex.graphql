@@ -7,7 +7,7 @@ query ComplexNestedBenchmarkQuery {
     category {
       id
       name
-      products(limit: 3) {
+      products {
         name
         price
       }
@@ -19,7 +19,7 @@ query ComplexNestedBenchmarkQuery {
         id
         name
         email
-        orders(limit: 2) {
+        orders {
           status
           total
         }

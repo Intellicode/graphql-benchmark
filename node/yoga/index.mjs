@@ -2,165 +2,18 @@ import { createSchema } from "graphql-yoga";
 import { createServer } from "node:http";
 import { createYoga } from "graphql-yoga";
 import { randomDelay, scaledDelay } from "./utils.mjs";
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { useGraphQlJit } from "@envelop/graphql-jit";
+import { loadFiles } from "@graphql-tools/load-files";
+import users from "../../mock-data/users.json" with { type: "json" };
+import products from "../../mock-data/products.json" with { type: "json" };
+import categories from "../../mock-data/categories.json" with { type: "json" };
+import reviews from "../../mock-data/reviews.json" with { type: "json" };
+import orders from "../../mock-data/orders.json" with { type: "json" };
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const mockDataPath = path.resolve(__dirname, "../../mock-data");
 
-// Import mock data
-const users = JSON.parse(
-  fs.readFileSync(path.join(mockDataPath, "users.json"), "utf-8")
-);
-const products = JSON.parse(
-  fs.readFileSync(path.join(mockDataPath, "products.json"), "utf-8")
-);
-const categories = JSON.parse(
-  fs.readFileSync(path.join(mockDataPath, "categories.json"), "utf-8")
-);
-const reviews = JSON.parse(
-  fs.readFileSync(path.join(mockDataPath, "reviews.json"), "utf-8")
-);
-const orders = JSON.parse(
-  fs.readFileSync(path.join(mockDataPath, "orders.json"), "utf-8")
-);
-
-export const schema = createSchema({
-  typeDefs: /* GraphQL */ `
-    type User {
-      id: ID!
-      name: String!
-      email: String!
-      role: UserRole!
-      orders: [Order!]
-      createdAt: String!
-      updatedAt: String!
-    }
-
-    enum UserRole {
-      CUSTOMER
-      ADMIN
-    }
-
-    type Product {
-      id: ID!
-      name: String!
-      description: String
-      price: Float!
-      inventory: Int!
-      category: Category!
-      reviews: [Review!]
-      createdAt: String!
-      updatedAt: String!
-    }
-
-    type Category {
-      id: ID!
-      name: String!
-      products: [Product!]
-    }
-
-    type Review {
-      id: ID!
-      rating: Int!
-      comment: String
-      user: User!
-      product: Product!
-      createdAt: String!
-    }
-
-    type Order {
-      id: ID!
-      user: User!
-      items: [OrderItem!]!
-      status: OrderStatus!
-      total: Float!
-      createdAt: String!
-      updatedAt: String!
-    }
-
-    enum OrderStatus {
-      PENDING
-      PROCESSING
-      SHIPPED
-      DELIVERED
-      CANCELLED
-    }
-
-    type OrderItem {
-      id: ID!
-      product: Product!
-      quantity: Int!
-      price: Float!
-    }
-
-    type Query {
-      user(id: ID!): User
-      users(limit: Int, offset: Int): [User!]!
-
-      product(id: ID!): Product
-      products(
-        search: String
-        categoryId: ID
-        minPrice: Float
-        maxPrice: Float
-        limit: Int
-        offset: Int
-      ): [Product!]!
-
-      categories: [Category!]!
-
-      order(id: ID!): Order
-      orders(
-        userId: ID!
-        status: OrderStatus
-        limit: Int
-        offset: Int
-      ): [Order!]!
-
-      topProducts(limit: Int): [Product!]!
-      recentReviews(limit: Int): [Review!]!
-    }
-
-    type Mutation {
-      createUser(name: String!, email: String!, role: UserRole!): User!
-      updateUser(id: ID!, name: String, email: String, role: UserRole): User!
-
-      createProduct(
-        name: String!
-        description: String
-        price: Float!
-        inventory: Int!
-        categoryId: ID!
-      ): Product!
-      updateProduct(
-        id: ID!
-        name: String
-        description: String
-        price: Float
-        inventory: Int
-        categoryId: ID
-      ): Product!
-
-      createCategory(name: String!): Category!
-
-      createReview(
-        productId: ID!
-        userId: ID!
-        rating: Int!
-        comment: String
-      ): Review!
-
-      createOrder(userId: ID!, items: [OrderItemInput!]!): Order!
-      updateOrderStatus(id: ID!, status: OrderStatus!): Order!
-    }
-
-    input OrderItemInput {
-      productId: ID!
-      quantity: Int!
-    }
-  `,
+// Create a schema with the typeDefs loaded from the file
+export const schema = await createSchema({
+  typeDefs: await loadFiles('../../schema.graphql'),
   resolvers: {
     Query: {
       user: async (_, { id }) => {
@@ -463,7 +316,7 @@ export const schema = createSchema({
   },
 });
 
-const yoga = createYoga({ schema });
+const yoga = createYoga({ schema, plugins: [useGraphQlJit()] });
 
 const server = createServer(yoga);
 

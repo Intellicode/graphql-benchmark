@@ -3,7 +3,7 @@ query ComplexBenchmarkQuery {
     id
     name
     email
-    orders(limit: 3) {
+    orders {
       id
       status
       total
