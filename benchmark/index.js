@@ -23,7 +23,7 @@ const QUERY_TYPES = ["simple", "medium", "complex", "super-complex"];
 
 async function loadQuery(type) {
   try {
-    const queryPath = path.join(__dirname, "..", "queries", `${type}.graphql`);
+    const queryPath = path.join(__dirname, "queries", `${type}.graphql`);
     const content = await readFileAsync(queryPath, "utf8");
     // Remove comments and trim whitespace
     return content.replace(/\/\/.*$/gm, "").trim();
