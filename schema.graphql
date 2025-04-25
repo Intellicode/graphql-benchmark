@@ -1,0 +1,127 @@
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: UserRole!
+  orders: [Order!]
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+type Product {
+  id: ID!
+  name: String!
+  description: String
+  price: Float!
+  inventory: Int!
+  category: Category!
+  reviews: [Review!]
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  products: [Product!]
+}
+
+type Review {
+  id: ID!
+  rating: Int!
+  comment: String
+  user: User!
+  product: Product!
+  createdAt: String!
+}
+
+type Order {
+  id: ID!
+  user: User!
+  items: [OrderItem!]!
+  status: OrderStatus!
+  total: Float!
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+type OrderItem {
+  id: ID!
+  product: Product!
+  quantity: Int!
+  price: Float!
+}
+
+type Query {
+  user(id: ID!): User
+  users(limit: Int, offset: Int): [User!]!
+
+  product(id: ID!): Product
+  products(
+    search: String
+    categoryId: ID
+    minPrice: Float
+    maxPrice: Float
+    limit: Int
+    offset: Int
+  ): [Product!]!
+
+  categories: [Category!]!
+
+  order(id: ID!): Order
+  orders(userId: ID!, status: OrderStatus, limit: Int, offset: Int): [Order!]!
+
+  topProducts(limit: Int): [Product!]!
+  recentReviews(limit: Int): [Review!]!
+}
+
+type Mutation {
+  createUser(name: String!, email: String!, role: UserRole!): User!
+  updateUser(id: ID!, name: String, email: String, role: UserRole): User!
+
+  createProduct(
+    name: String!
+    description: String
+    price: Float!
+    inventory: Int!
+    categoryId: ID!
+  ): Product!
+  updateProduct(
+    id: ID!
+    name: String
+    description: String
+    price: Float
+    inventory: Int
+    categoryId: ID
+  ): Product!
+
+  createCategory(name: String!): Category!
+
+  createReview(
+    productId: ID!
+    userId: ID!
+    rating: Int!
+    comment: String
+  ): Review!
+
+  createOrder(userId: ID!, items: [OrderItemInput!]!): Order!
+  updateOrderStatus(id: ID!, status: OrderStatus!): Order!
+}
+
+input OrderItemInput {
+  productId: ID!
+  quantity: Int!
+}

@@ -1,0 +1,42 @@
+query ComplexNestedBenchmarkQuery {
+  products(search: "product", limit: 5) {
+    id
+    name
+    description
+    price
+    category {
+      id
+      name
+      products(limit: 3) {
+        name
+        price
+      }
+    }
+    reviews {
+      rating
+      comment
+      user {
+        id
+        name
+        email
+        orders(limit: 2) {
+          status
+          total
+        }
+      }
+    }
+  }
+
+  recentReviews(limit: 10) {
+    rating
+    comment
+    product {
+      name
+      price
+    }
+    user {
+      name
+      email
+    }
+  }
+}

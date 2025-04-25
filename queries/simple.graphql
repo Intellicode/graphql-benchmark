@@ -1,0 +1,8 @@
+query SimpleProductQuery {
+  products(limit: 20) {
+    id
+    name
+    price
+    inventory
+  }
+}

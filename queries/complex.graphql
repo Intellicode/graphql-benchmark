@@ -1,0 +1,37 @@
+query ComplexBenchmarkQuery {
+  users(limit: 5) {
+    id
+    name
+    email
+    orders(limit: 3) {
+      id
+      status
+      total
+      items {
+        product {
+          id
+          name
+          price
+          category {
+            name
+          }
+        }
+        quantity
+      }
+    }
+  }
+
+  topProducts(limit: 10) {
+    id
+    name
+    price
+    inventory
+    reviews {
+      rating
+      comment
+      user {
+        name
+      }
+    }
+  }
+}

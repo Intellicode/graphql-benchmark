@@ -1,0 +1,12 @@
+query MediumComplexityQuery {
+  products(minPrice: 20, maxPrice: 50, limit: 10) {
+    id
+    name
+    price
+    category {
+      id
+      name
+    }
+    inventory
+  }
+}
