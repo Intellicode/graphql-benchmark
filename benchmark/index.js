@@ -5,10 +5,11 @@ const path = require("path");
 const autocannon = require("autocannon");
 const { promisify } = require("util");
 const readFileAsync = promisify(fs.readFile);
+const port = process.env.PORT || 3000;
 
 // Default configuration
 const DEFAULT_CONFIG = {
-  url: "http://localhost:4000/graphql",
+  url: `http://localhost:${port}/graphql`,
   method: "POST",
   connections: 10,
   pipelining: 1,
@@ -38,6 +39,7 @@ async function runBenchmark({
   connections = DEFAULT_CONFIG.connections,
   duration = DEFAULT_CONFIG.duration,
   queryType = "simple",
+  pipelining = DEFAULT_CONFIG.pipelining,
 }) {
   if (!QUERY_TYPES.includes(queryType)) {
     console.error(
@@ -64,6 +66,7 @@ async function runBenchmark({
     url,
     connections,
     duration,
+    pipelining,
     setupClient: (client) => {
       client.setBody(body);
     },
