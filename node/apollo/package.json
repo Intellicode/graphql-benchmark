@@ -1,0 +1,17 @@
+{
+  "name": "apollo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@apollo/server": "^4.12.0",
+    "@graphql-tools/load-files": "^7.0.1",
+    "graphql": "^16.11.0"
+  }
+}
