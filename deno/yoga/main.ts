@@ -1,8 +1,25 @@
-export function add(a: number, b: number): number {
-  return a + b;
-}
+import { createSchema, createYoga } from "graphql-yoga";
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
-}
+const yoga = createYoga({
+  schema: createSchema({
+    typeDefs: /* GraphQL */ `
+      type Query {
+        hello: String!
+      }
+    `,
+    resolvers: {
+      Query: {
+        hello: () => "Hello Deno!",
+      },
+    },
+  }),
+});
+
+serve(yoga, {
+  onListen({ hostname, port }) {
+    console.log(
+      `Listening on http://${hostname}:${port}/${yoga.graphqlEndpoint}`
+    );
+  },
+});
