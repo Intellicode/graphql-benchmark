@@ -1,4 +1,4 @@
-import { setTimeout } from "deno:timers/promises";
+import { setTimeout } from "node:timers/promises";
 
 /**
  * Adds a variable delay based on operation complexity

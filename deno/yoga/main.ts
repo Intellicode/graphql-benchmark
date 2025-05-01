@@ -1,23 +1,18 @@
 import { createSchema, createYoga } from "graphql-yoga";
-import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { useGraphQlJit } from "@envelop/graphql-jit";
+import { loadFiles } from "@graphql-tools/load-files";
+import { resolvers } from "../shared/resolver.ts";
 
 const yoga = createYoga({
   schema: createSchema({
-    typeDefs: /* GraphQL */ `
-      type Query {
-        hello: String!
-      }
-    `,
-    resolvers: {
-      Query: {
-        hello: () => "Hello Deno!",
-      },
-    },
+    typeDefs: await loadFiles("../../schema.graphql"),
+    resolvers,
   }),
+  plugins: [useGraphQlJit()],
 });
 
-serve(yoga, {
-  onListen({ hostname, port }) {
+Deno.serve(yoga, {
+  onListen({ hostname, port }: Deno.NetAddr) {
     console.log(
       `Listening on http://${hostname}:${port}/${yoga.graphqlEndpoint}`
     );

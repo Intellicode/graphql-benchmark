@@ -3,7 +3,7 @@ import products from "../../mock-data/products.json" with { type: "json" };
 import categories from "../../mock-data/categories.json" with { type: "json" };
 import reviews from "../../mock-data/reviews.json" with { type: "json" };
 import orders from "../../mock-data/orders.json" with { type: "json" };
-import { randomDelay, scaledDelay } from "./utils";
+import { randomDelay, scaledDelay } from "./utils.ts";
 
 export const resolvers =  {
       Query: {
