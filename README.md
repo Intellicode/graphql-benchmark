@@ -30,6 +30,23 @@ PORT=4000 node index.js -q simple -d 40 -c 1000
 PORT=4000 node index.js -q simple -d 40 -c 1000
 ```
 
+### Overview
+
+| Server         | Runtime | Avg Latency (ms) | Requests/sec | Throughput (MB/s) | Errors (Timeouts) |
+|---------------|---------|------------------|--------------|-------------------|-------------------|
+| Yoga          | Bun     | 71.02            | 13,983.6     | 20.56             | 0                 |
+| Mercurius     | Node    | 76.82            | 13,175.8     | 19.98             | 19 (0)            |
+| Yoga          | Node    | 81.75            | 12,844.4     | 19.46             | 57 (0)            |
+| Yoga          | Deno    | 108.38           | 9,185.21     | 13.71             | 0                 |
+| Apollo        | Node    | 226.02           | 5,278.73     | 8.62              | 967 (314)         |
+
+- **Avg Latency (ms):** Lower is better.
+- **Requests/sec:** Higher is better.
+- **Throughput (MB/s):** Higher is better.
+- **Errors (Timeouts):** Lower is better.
+
+> **Note:** All results are for the "simple" query with 1000 connections over 40 seconds.
+
 ### Yoga (Node)
 
 🚀 Running benchmark with simple query
