@@ -160,3 +160,33 @@ Query Type: simple
 Latency (ms): avg: 226.02, min: 103, max: 26093
 Requests/sec: 5278.73
 Throughput: 8.62 MB/s
+
+### Yoga (Bun)
+🚀 Running benchmark with simple query
+URL: http://localhost:4000/graphql
+Connections: 1000
+Duration: 40s
+
+Running 40s test @ http://localhost:4000/graphql
+1000 connections
+
+| Stat    | 2.5%  | 50%   | 97.5% | 99%   | Avg      | Stdev   | Max    |
+|---------|-------|-------|-------|-------|----------|----------|---------|
+| Latency | 70 ms | 71 ms | 73 ms | 74 ms | 71.02 ms | 4.33 ms | 184 ms |
+
+| Stat      | 1%    | 2.5%  | 50%     | 97.5%   | Avg      | Stdev   | Min   |
+|-----------|-------|-------|---------|---------|----------|---------|-------|
+| Req/Sec   | 12,375  | 12,375  | 14,031  | 14,095  | 13,983.6 | 263.19  | 12,375  |
+| Bytes/Sec | 19.1 MB | 19.1 MB | 21.6 MB | 21.7 MB | 21.6 MB  | 405 kB | 19.1 MB |
+
+Req/Bytes counts sampled once per second.
+\# of samples: 40
+
+560k requests in 40.07s, 862 MB read
+
+✅ Benchmark completed
+
+Query Type: simple
+Latency (ms): avg: 71.02, min: 70, max: 184
+Requests/sec: 13983.6
+Throughput: 20.56 MB/s
